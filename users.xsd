@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:element name="users" type="usersType"/>
+
+<xs:complexType name="usersType">
+	<xs:sequence>	
+	<xs:element name="user" type="userType" minOccurs="1" maxOccurs="unbounded" />
+	</xs:sequence>
+</xs:complexType>
+
+<xs:simpleType name="ageType">
+	<xs:restriction base="xs:nonNegativeInteger">
+		<xs:minInclusive value="1"/>
+		<xs:maxInclusive value="120"/>
+	</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="genderType">
+	<xs:restriction base="xs:string">
+		<xs:enumeration value="F"/>
+		<xs:enumeration value="M"/>
+	</xs:restriction>
+</xs:simpleType>
+
+<xs:complexType name="userType">
+	<xs:sequence>
+		<xs:element name="name" type="xs:string"/>
+		<xs:element name="age" type="ageType"/>	
+		<xs:element name="role" type="xs:string"/>
+	</xs:sequence>
+	<xs:attribute name="gender" type="genderType" use="required" />
+</xs:complexType>
+</xs:schema>
