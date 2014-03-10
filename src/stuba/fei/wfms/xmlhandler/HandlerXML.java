@@ -1,4 +1,4 @@
-package com.fei.wms;
+package stuba.fei.wfms.xmlhandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -63,6 +63,12 @@ public class HandlerXML {
     public HandlerXML(String root) 
     {
         this.root = root;
+    }
+    
+    /**
+     * Default empty constructor
+     */
+    public HandlerXML() {
     }
     
     /** 
@@ -199,14 +205,14 @@ public class HandlerXML {
     }
     
     /**
-     * Method for XML validation against XSD schema.
+     * Static method for XML validation against XSD schema.
      * @param xmlFilePath Input XML file path.
      * @param xsdFilePath XSD schema path.
      * @return True or false if xml is valid against schema or not.
      * @throws IOException When I/O error with both files occurs.
      * @throws SAXException When XML file is not valid.
      */
-    public boolean XsdValidateXml(String xmlFilePath, String xsdFilePath)
+    public static boolean XsdValidateXml(String xmlFilePath, String xsdFilePath)
             throws IOException, SAXException
     {
         try {
@@ -222,7 +228,7 @@ public class HandlerXML {
     }
     
     /**
-     * Method for XML transformation using provided XSL file.
+     * Static method for XML transformation using provided XSL file.
      * @param xmlFilePath Path to input XML file.
      * @param xslFilePath Path to XSL transformation file.
      * @param outputFile Path to output file.
@@ -230,7 +236,7 @@ public class HandlerXML {
      * @throws Exception In case of I/O error with files, or creation of 
      * transformation factory.
      */
-    public boolean xslTransformXml(String xmlFilePath, 
+    public static boolean xslTransformXml(String xmlFilePath, 
                                   String xslFilePath,
                                   String outputFile) 
             throws Exception

@@ -1,21 +1,16 @@
 
 package stuba.fei.wfms.gui;
 
-import com.fei.wms.HandlerXML;
-import java.util.Arrays;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import stuba.fei.wfms.handler_xml.HandlerException;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import stuba.fei.wfms.xmlhandler.HandlerException;
+import stuba.fei.wfms.xmlhandler.HandlerXML;
 
 public class GUI extends javax.swing.JFrame {
     
-    /**
-     * Creates new form ContactEditor
-     */
     public GUI() {
         initComponents();
-    }
-    
+    }    
    
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -135,7 +130,7 @@ public class GUI extends javax.swing.JFrame {
 
         action_jPanel2.setBackground(new java.awt.Color(132, 229, 115));
 
-        jButton1.setText("Save XML");
+        jButton1.setText("Save to XML");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -145,6 +140,11 @@ public class GUI extends javax.swing.JFrame {
         jButton2.setText("Validate XML");
         jButton2.setMaximumSize(new java.awt.Dimension(100, 28));
         jButton2.setMinimumSize(new java.awt.Dimension(100, 28));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Export to txt");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -207,27 +207,33 @@ public class GUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Triggered action on exit button
+     * @param evt 
+     */
     private void exit_jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exit_jButton5ActionPerformed
         System.exit(0);
     }//GEN-LAST:event_exit_jButton5ActionPerformed
-
+    /**
+     * Triggered action on save button
+     * @param evt 
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
-        String user = "user";
+        // main repeating element
+        String mainElm = "user";
+        // initialization of XML handler class
         HandlerXML hxml = new HandlerXML("users");
-        Integer gender = gender_jComboBox1.getSelectedIndex();
-        String rolle = role_jTextField4.getText();
-        String fullname = fullname_jTextField1.getText();
-        String age = age_jTextField3.getText();
-        String gend = null;
         
-        
-        try {
-            
+        try 
+        {
+            // gender transform to abbreviation
+            int gender = gender_jComboBox1.getSelectedIndex();
+            String gend = null;
             switch(gender){
                case 0:
-                   throw new Exception("Gender not selected.");
+                   throw new Exception("Gender not selected!");
                case 1:
                    gend = "M";
                    break;
@@ -235,40 +241,130 @@ public class GUI extends javax.swing.JFrame {
                     gend = "F";
                    break;
             }
+            // check of not null name at least
+            if(fullname_jTextField1.getText().isEmpty())
+                throw new Exception("Name field empty!");
             
-        JFileChooser jChoosSave = new JFileChooser();
-        jChoosSave.showSaveDialog(jFrame1); 
-        String filePath = jChoosSave.getSelectedFile().getPath();//"test.xml";
+            JFileChooser chooserSave = new JFileChooser();
+            chooserSave.setDialogTitle("Choose file to save form");
+            chooserSave.setFileFilter(
+                new FileNameExtensionFilter("XML file", new String[] {"xml"}));
+            chooserSave.showSaveDialog(jFrame1); 
+            String filePath = chooserSave.getSelectedFile().getPath();
         
-        
+            // DOM structure construction using XML handler
             hxml.loadXml(filePath);
-            hxml.createTag(hxml.getRoot(), user);
-            hxml.createTag(user, "name", fullname);  
-            hxml.createTag(user, "age", age);
-            hxml.createTag(user, "role", rolle);
-            hxml.createAttr(user, "gender", gend);
-            
+            hxml.createTag(hxml.getRoot(), mainElm);
+            hxml.createTag(mainElm, "name", fullname_jTextField1.getText());  
+            hxml.createTag(mainElm, "age", age_jTextField3.getText());
+            hxml.createTag(mainElm, "role", role_jTextField4.getText());
+            hxml.createAttr(mainElm, "gender", gend);
             
             if(hxml.saveXml(filePath) == true){
-                HandlerException.showInfoStatus(jFrame1, "Saved!", "Sucess");
+                HandlerException.showInfoStatus(jFrame1, "Saved!", "Success");
             }else{
                 HandlerException.showDialog(jFrame1, "Unsaved!");
             }
-           
-            //System.out.println(hxml.XsdValidateXml(filePath, "doc.xsd"));
+            
+            // clearing form fields
+            fullname_jTextField1.setText("");
+            age_jTextField3.setText("");
+            role_jTextField4.setText("");
+            gender_jComboBox1.setSelectedIndex(0);
             
         } catch (Exception ex) {
             HandlerException.showDialog(jFrame1, ex.getMessage());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    /**
+     * Triggered action on transformation button
+     * @param evt 
+     */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+     // init of file chooser
+     JFileChooser chooserTrans = new JFileChooser();
+        
+     try {
+        // selection of input XML
+        chooserTrans.setFileFilter(
+                new FileNameExtensionFilter("XML file", new String[] {"xml"}));
+        chooserTrans.setDialogTitle("XML input file to transform");
+        chooserTrans.showOpenDialog(jFrame1); 
+        if(!chooserTrans.getSelectedFile().exists())
+            throw new Exception("XML file not selected or invalid!");
+        String xmlFilePath = chooserTrans.getSelectedFile().getPath();
+        
+        // selection of input XSL
+        chooserTrans.setFileFilter(
+                new FileNameExtensionFilter("XSL file", new String[] {"xsl"}));
+        chooserTrans.setDialogTitle("XSL transformation file");
+        chooserTrans.showOpenDialog(jFrame1);
+        if(!chooserTrans.getSelectedFile().exists())
+            throw new Exception("XSL file not selected or invalid path!");
+        String xslFilePath = chooserTrans.getSelectedFile().getPath();
+        
+        // selection of output file
+        chooserTrans.setFileFilter(
+                new FileNameExtensionFilter("TXT file", new String[] {"txt"}));
+        chooserTrans.setDialogTitle("Select output file");
+        chooserTrans.showSaveDialog(jFrame1);
+        String outputFilePath = chooserTrans.getSelectedFile().getPath();
+        
+        // transformation using handler static method and info catching
+        if( 
+            HandlerXML.xslTransformXml(xmlFilePath, xslFilePath, outputFilePath)
+          ) 
+        {
+            HandlerException.showInfoStatus(jFrame1, "Transformed!", "Success"); 
+        } else {
+            HandlerException.showDialog(jFrame1, "Transformation failed!");
+        }  
+     } catch(Exception ex) {
+        HandlerException.showDialog(jFrame1, ex.getMessage());
+     }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void gender_jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gender_jComboBox1ActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_gender_jComboBox1ActionPerformed
+    /**
+     * Triggered action on validation button
+     * @param evt 
+     */
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // init of file chooser
+     JFileChooser chooserVal = new JFileChooser();
+        
+     try {
+        
+         // selection of input XML
+        chooserVal.setFileFilter(
+                new FileNameExtensionFilter("XML file", new String[] {"xml"}));
+        chooserVal.setDialogTitle("XML input file for validation");
+        chooserVal.showOpenDialog(jFrame1); 
+        if(!chooserVal.getSelectedFile().exists())
+            throw new Exception("XML file not selected or invalid!");
+        String xmlFilePath = chooserVal.getSelectedFile().getPath();
+        
+        // selection of input XSL
+        chooserVal.setFileFilter(
+                new FileNameExtensionFilter("XSD file", new String[] {"xsd"}));
+        chooserVal.setDialogTitle("XSD schema file to check against");
+        chooserVal.showOpenDialog(jFrame1);
+        if(!chooserVal.getSelectedFile().exists())
+            throw new Exception("XSD file not selected or invalid path!");
+        String xsdFilePath = chooserVal.getSelectedFile().getPath();
+        
+        // validation using handler static method and info catching
+        if( HandlerXML.XsdValidateXml(xmlFilePath, xsdFilePath) ) 
+        {   
+            HandlerException.showInfoStatus(jFrame1, "Valid!", "Success"); 
+        } else {
+            HandlerException.showDialog(jFrame1, "Invalid!");
+        }  
+     } catch(Exception ex) {
+        HandlerException.showDialog(jFrame1, ex.getMessage());
+     }
+    }//GEN-LAST:event_jButton2ActionPerformed
     
     /**
      * @param args the command line arguments

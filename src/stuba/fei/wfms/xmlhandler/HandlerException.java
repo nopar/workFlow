@@ -1,4 +1,4 @@
-package stuba.fei.wfms.handler_xml;
+package stuba.fei.wfms.xmlhandler;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 public class HandlerException { 
 
     /**
-     * Default cvonstructor
+     * Default constructor
      */
     public HandlerException(){
     }
@@ -24,16 +24,16 @@ public class HandlerException {
     public static void showDialog(JFrame frame, String msg) {
         JOptionPane.showMessageDialog(
             frame, 
-            "There was error occured: " + msg, 
+            msg, 
             "Error!", 
             JOptionPane.ERROR_MESSAGE);
     }
     
-    public static void showInfoStatus(JFrame frame, String msg, String ms) {
+    public static void showInfoStatus(JFrame frame, String msg, String title) {
         JOptionPane.showMessageDialog(
             frame, 
             msg, 
-            ms, 
+            title, 
             JOptionPane.INFORMATION_MESSAGE);
     }
     
