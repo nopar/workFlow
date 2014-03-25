@@ -1,9 +1,10 @@
-
 package stuba.fei.wfms.gui;
 
+import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import stuba.fei.wfms.xmlhandler.HandlerException;
+import stuba.fei.wfms.integration.ComWrapper;
 import stuba.fei.wfms.xmlhandler.HandlerXML;
 
 public class GUI extends javax.swing.JFrame {
@@ -27,11 +28,14 @@ public class GUI extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         role_jTextField4 = new javax.swing.JTextField();
         gender_jComboBox1 = new javax.swing.JComboBox();
-        exit_jButton5 = new javax.swing.JButton();
-        action_jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
+        action_jPanel2 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        infoPanel = new javax.swing.JTextArea();
+        exit_jButton5 = new javax.swing.JButton();
 
         org.jdesktop.layout.GroupLayout jFrame1Layout = new org.jdesktop.layout.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -67,13 +71,20 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel3.setText("Age:");
 
-        jLabel4.setText("Role");
+        jLabel4.setText("Role:");
 
         gender_jComboBox1.setMaximumRowCount(3);
         gender_jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "<-choose->", "Male", "Female", " " }));
         gender_jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                gender_jComboBox1ActionPerformed(evt);
+                genderActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Save to XML");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveActionPerformed(evt);
             }
         });
 
@@ -88,17 +99,22 @@ public class GUI extends javax.swing.JFrame {
                     .add(jLabel1))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(age_jTextField3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, fullname_jTextField1))
-                .add(18, 18, 18)
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(fullname_jTextField1)
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(age_jTextField3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 40, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(0, 98, Short.MAX_VALUE)))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jLabel2)
                     .add(jLabel4))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(role_jTextField4)
-                    .add(gender_jComboBox1, 0, 129, Short.MAX_VALUE))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(gender_jComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 129, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(role_jTextField4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 129, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(57, 57, 57))
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
+                .add(0, 0, Short.MAX_VALUE)
+                .add(jButton1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 110, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -115,41 +131,35 @@ public class GUI extends javax.swing.JFrame {
                         .add(role_jTextField4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(jLabel4)
                         .add(age_jTextField3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .add(34, 34, 34))
+                .add(11, 11, 11)
+                .add(jButton1))
         );
 
         age_jTextField3.getAccessibleContext().setAccessibleName("age");
         gender_jComboBox1.getAccessibleContext().setAccessibleName("gender_combo");
 
-        exit_jButton5.setText("EXIT");
-        exit_jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exit_jButton5ActionPerformed(evt);
-            }
-        });
-
         action_jPanel2.setBackground(new java.awt.Color(132, 229, 115));
-
-        jButton1.setText("Save to XML");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
 
         jButton2.setText("Validate XML");
         jButton2.setMaximumSize(new java.awt.Dimension(100, 28));
         jButton2.setMinimumSize(new java.awt.Dimension(100, 28));
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                validateActionPerformed(evt);
             }
         });
 
         jButton3.setText("Export to txt");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                exportActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Sign");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                signActionPerformed(evt);
             }
         });
 
@@ -158,24 +168,41 @@ public class GUI extends javax.swing.JFrame {
         action_jPanel2Layout.setHorizontalGroup(
             action_jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(action_jPanel2Layout.createSequentialGroup()
-                .add(31, 31, 31)
-                .add(jButton1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 110, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 54, Short.MAX_VALUE)
-                .add(jButton2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 110, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(51, 51, 51)
-                .add(jButton3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 110, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(32, 32, 32))
+                .addContainerGap()
+                .add(action_jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(action_jPanel2Layout.createSequentialGroup()
+                        .add(jButton2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 110, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(0, 0, Short.MAX_VALUE))
+                    .add(action_jPanel2Layout.createSequentialGroup()
+                        .add(jButton3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 110, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(jButton4)))
+                .addContainerGap())
         );
         action_jPanel2Layout.setVerticalGroup(
             action_jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(action_jPanel2Layout.createSequentialGroup()
-                .add(22, 22, 22)
+                .addContainerGap()
+                .add(jButton2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(action_jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jButton1)
-                    .add(jButton2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jButton3))
-                .addContainerGap(25, Short.MAX_VALUE))
+                    .add(jButton3)
+                    .add(jButton4))
+                .addContainerGap())
         );
+
+        infoPanel.setEditable(false);
+        infoPanel.setColumns(20);
+        infoPanel.setRows(5);
+        infoPanel.setName("infoPanel"); // NOI18N
+        jScrollPane1.setViewportView(infoPanel);
+
+        exit_jButton5.setText("EXIT");
+        exit_jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitActionPerformed(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -184,6 +211,7 @@ public class GUI extends javax.swing.JFrame {
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jScrollPane1)
                     .add(action_jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(jPanel1, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
@@ -198,9 +226,10 @@ public class GUI extends javax.swing.JFrame {
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(action_jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(exit_jButton5)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 80, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 11, Short.MAX_VALUE)
+                .add(exit_jButton5))
         );
 
         action_jPanel2.getAccessibleContext().setAccessibleName("");
@@ -212,14 +241,14 @@ public class GUI extends javax.swing.JFrame {
      * Triggered action on exit button
      * @param evt 
      */
-    private void exit_jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exit_jButton5ActionPerformed
+    private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
         System.exit(0);
-    }//GEN-LAST:event_exit_jButton5ActionPerformed
+    }//GEN-LAST:event_exitActionPerformed
     /**
      * Triggered action on save button
      * @param evt 
      */
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         
         // main repeating element
         String mainElm = "user";
@@ -246,14 +275,17 @@ public class GUI extends javax.swing.JFrame {
                 throw new Exception("Name field empty!");
             
             JFileChooser chooserSave = new JFileChooser();
-            chooserSave.setDialogTitle("Choose file to save form");
+            chooserSave.setDialogTitle("Choose file to save to");
             chooserSave.setFileFilter(
                 new FileNameExtensionFilter("XML file", new String[] {"xml"}));
             chooserSave.showSaveDialog(jFrame1); 
             String filePath = chooserSave.getSelectedFile().getPath();
         
             // DOM structure construction using XML handler
-            hxml.loadXml(filePath);
+            hxml.loadXml(filePath,"http://wfms.fei.stuba.sk/team/R");
+            // sets info about file
+            infoPanel.append("XML - " + filePath + " loaded.\n");
+            
             hxml.createTag(hxml.getRoot(), mainElm);
             hxml.createTag(mainElm, "name", fullname_jTextField1.getText());  
             hxml.createTag(mainElm, "age", age_jTextField3.getText());
@@ -261,9 +293,9 @@ public class GUI extends javax.swing.JFrame {
             hxml.createAttr(mainElm, "gender", gend);
             
             if(hxml.saveXml(filePath) == true){
-                HandlerException.showInfoStatus(jFrame1, "Saved!", "Success");
+                infoPanel.append("XML file saved!\n");
             }else{
-                HandlerException.showDialog(jFrame1, "Unsaved!");
+                infoPanel.append("Error saving XML file.\n");
             }
             
             // clearing form fields
@@ -273,14 +305,14 @@ public class GUI extends javax.swing.JFrame {
             gender_jComboBox1.setSelectedIndex(0);
             
         } catch (Exception ex) {
-            HandlerException.showDialog(jFrame1, ex.getMessage());
+            infoPanel.append(ex.getMessage()+"\n");
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_saveActionPerformed
     /**
      * Triggered action on transformation button
      * @param evt 
      */
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void exportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportActionPerformed
      // init of file chooser
      JFileChooser chooserTrans = new JFileChooser();
         
@@ -315,27 +347,28 @@ public class GUI extends javax.swing.JFrame {
             HandlerXML.xslTransformXml(xmlFilePath, xslFilePath, outputFilePath)
           ) 
         {
-            HandlerException.showInfoStatus(jFrame1, "Transformed!", "Success"); 
+            infoPanel.append("XML file transformed!\n");
         } else {
-            HandlerException.showDialog(jFrame1, "Transformation failed!");
+            infoPanel.append("Transformation failed\n");
         }  
      } catch(Exception ex) {
-        HandlerException.showDialog(jFrame1, ex.getMessage());
+        infoPanel.append(ex.getMessage()+"\n");
      }
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void gender_jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gender_jComboBox1ActionPerformed
-    }//GEN-LAST:event_gender_jComboBox1ActionPerformed
+    }//GEN-LAST:event_exportActionPerformed
+    /**
+     * Triggered action on gender combobox.
+     * @param evt 
+     */
+    private void genderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genderActionPerformed
+    }//GEN-LAST:event_genderActionPerformed
     /**
      * Triggered action on validation button
      * @param evt 
      */
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void validateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_validateActionPerformed
         // init of file chooser
      JFileChooser chooserVal = new JFileChooser();
-        
      try {
-        
          // selection of input XML
         chooserVal.setFileFilter(
                 new FileNameExtensionFilter("XML file", new String[] {"xml"}));
@@ -357,16 +390,83 @@ public class GUI extends javax.swing.JFrame {
         // validation using handler static method and info catching
         if( HandlerXML.XsdValidateXml(xmlFilePath, xsdFilePath) ) 
         {   
-            HandlerException.showInfoStatus(jFrame1, "Valid!", "Success"); 
+            infoPanel.append("XML file is valid!\n");
         } else {
-            HandlerException.showDialog(jFrame1, "Invalid!");
+            infoPanel.append("XML file is invalid!\n");
         }  
      } catch(Exception ex) {
-        HandlerException.showDialog(jFrame1, ex.getMessage());
+        infoPanel.append(ex.getMessage()+"\n");
      }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_validateActionPerformed
+    /**
+    * Triggered action on sign button.
+    * @param evt 
+    */
+    private void signActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signActionPerformed
+       
+        String namespace = "http://wfms.fei.stuba.sk/team/R";
+        infoPanel.append("Namespace: " + namespace + "\n");
+        
+        ComWrapper cw = new ComWrapper("lib/jacob-1.17-x86.dll");
+        
+        try {
+            cw.loadLibrary();
+            infoPanel.append("Java COM bridge library loaded...\n");
+        
+            // choose input XML
+            JFileChooser chSignXML = new JFileChooser();
+            chSignXML.setFileFilter(
+                new FileNameExtensionFilter("XML file", new String[] {"xml"}));
+            chSignXML.setDialogTitle("XML input file to be signed");
+            chSignXML.showOpenDialog(jFrame1); 
+            if(!chSignXML.getSelectedFile().exists())
+                throw new Exception("XML file not selected or invalid!");
+            String xmlFile = chSignXML.getSelectedFile().getPath();
+            // choose input schema
+            JFileChooser chSignXSD = new JFileChooser();
+            chSignXSD.setFileFilter(
+                new FileNameExtensionFilter("XSD file", new String[] {"xsd"}));
+            chSignXSD.setDialogTitle("XML Schema for input XML for validation");
+            chSignXSD.showOpenDialog(jFrame1); 
+            if(!chSignXSD.getSelectedFile().exists())
+                throw new Exception("XSD file not selected or invalid!");
+            String xsdFile = chSignXSD.getSelectedFile().getPath();
+            // choose input transformation
+            JFileChooser chSignXSL = new JFileChooser();
+            chSignXSL.setFileFilter(
+                new FileNameExtensionFilter("XSL file", new String[] {"xsl"}));
+            chSignXSL.setDialogTitle("XML Schema for input XML for validation");
+            chSignXSL.showOpenDialog(jFrame1); 
+            if(!chSignXSL.getSelectedFile().exists())
+                throw new Exception("XSL file not selected or invalid!");
+            String xslFile = chSignXSL.getSelectedFile().getPath();
+            // creation of signed XML
+            String sxml;
+            sxml = cw.signXades256(
+                    new File(xmlFile),
+                    new File(xsdFile),
+                    namespace,
+                    new File(xslFile),
+                    namespace,
+                    namespace
+            );
+            infoPanel.append("Signed XML envelope created!\n");
+            // saving of created envelope
+            JFileChooser chSave = new JFileChooser();
+            chSave.setDialogTitle("Choose file to save to");
+            chSave.setFileFilter(
+                new FileNameExtensionFilter("XML file", new String[] {"xml"}));
+            chSave.showSaveDialog(jFrame1); 
+            String filePath = chSave.getSelectedFile().getPath();
+            ComWrapper.saveXmlAsString(sxml, filePath);
+            infoPanel.append("Signed XML saved to " + filePath + "\n");
+        } catch(UnsatisfiedLinkError | Exception e) {
+            infoPanel.append(e.getMessage()+"\n");
+        }
+    }//GEN-LAST:event_signActionPerformed
     
     /**
+     * Generated main method.
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -377,24 +477,20 @@ public class GUI extends javax.swing.JFrame {
          */
         try {
             javax.swing.UIManager.LookAndFeelInfo[] installedLookAndFeels=javax.swing.UIManager.getInstalledLookAndFeels();
-            for (int idx=0; idx<installedLookAndFeels.length; idx++)
-                if ("Nimbus".equals(installedLookAndFeels[idx].getName())) {
-                    javax.swing.UIManager.setLookAndFeel(installedLookAndFeels[idx].getClassName());
+            for (UIManager.LookAndFeelInfo installedLookAndFeel : installedLookAndFeels) {
+                if ("Nimbus".equals(installedLookAndFeel.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(installedLookAndFeel.getClassName());
                     break;
                 }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            }
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new GUI().setVisible(true);
             }
@@ -408,9 +504,11 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JButton exit_jButton5;
     private javax.swing.JTextField fullname_jTextField1;
     private javax.swing.JComboBox gender_jComboBox1;
+    private javax.swing.JTextArea infoPanel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JFrame jFrame2;
     private javax.swing.JLabel jLabel1;
@@ -418,6 +516,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField role_jTextField4;
     // End of variables declaration//GEN-END:variables
     

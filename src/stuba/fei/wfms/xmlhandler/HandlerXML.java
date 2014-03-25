@@ -27,17 +27,14 @@ import org.xml.sax.SAXException;
  * @author Matej Pivarci
  */
 public class HandlerXML {
-
     /**
      * Root element name, default name if not set is null.
      */
     private String root = null;
-    
     /**
      * Variable to hold current handlers loaded XML document.
      */
     private Document doc;
-    
     /**
      * Getter for root variable.
      * @return String name of root element.
@@ -46,7 +43,6 @@ public class HandlerXML {
     {
         return root;
     }
-
     /**
      * Setter for root variable.
      * @param root Root element name to set.
@@ -55,7 +51,6 @@ public class HandlerXML {
     {
         this.root = root;
     }
-
     /**
      * Constructor for creating new handler with provided root element name.
      * @param root Provided root element name.
@@ -64,21 +59,20 @@ public class HandlerXML {
     {
         this.root = root;
     }
-    
     /**
      * Default empty constructor
      */
     public HandlerXML() {
-    }
-    
+    }    
     /** 
      * Load XML DOM from provided file path or create new clean structure and 
      * set root element variable.
      * @param xmlFilePath Path to XML file.
+     * @param namespace Set xmlns of root element as explicit namespace
      * @throws Exception When I/O error is triggered with file, or document
      * builder from factory cannot be made, or parsing issues.
      */
-    public void loadXml(String xmlFilePath) 
+    public void loadXml(String xmlFilePath, String namespace) 
             throws Exception 
     {
         // creating new builder
@@ -96,14 +90,15 @@ public class HandlerXML {
             // checkes whether root element name is given and 
             // creates it, if not, raises exception
             if(root != null) {
-                Element rootElement = doc.createElement(root);
-                doc.appendChild(rootElement);
+                //Element rootElement = doc.createElement(root);
+                //doc.appendChild(rootElement);
+                Element ns = doc.createElementNS(namespace, root);
+                doc.appendChild(ns);
             } else {
                 throw new Exception("Name for root element not set");
             }
         }
     }
-    
     /**
      * Private method for retrieving last Node from loaded document with 
      * provided name.
@@ -119,7 +114,6 @@ public class HandlerXML {
             throw new Exception("Element '" + name + "' not found!");
         return nl.item(nl.getLength()-1);
     }
-    
     /**
      * Create element in loaded document with provided name inside parent
      * identified with last occurrence of his name.
@@ -136,7 +130,6 @@ public class HandlerXML {
         Node elm = doc.createElement(name);
         this.getNode(parent).appendChild(elm);
     }
-    
     /**
      * Create element in loaded document with provided name inside parent 
      * identified with last occurrence of his name and inserts text in it.
@@ -154,7 +147,6 @@ public class HandlerXML {
         elm.appendChild(doc.createTextNode(innerText));
         this.getNode(parent).appendChild(elm);
     }
-    
     /**
      * Create attribute in loaded document.Set it to last occurrence of given 
      * element with provided name and value.If this element already has this 
@@ -173,9 +165,7 @@ public class HandlerXML {
         Attr at = doc.createAttribute(name);
         Element elm = (Element) this.getNode(element);
         elm.setAttribute(name, value);
-    }
-    
-    
+    }   
     /**
      * Method for saving loaded XML DOM structure into XML file with given path.
      * @param xmlFilePath Path to XML file to save to.
@@ -197,13 +187,12 @@ public class HandlerXML {
         Transformer transformer = trFactory.newTransformer();
         //setting source and destination for transform
         DOMSource source = new DOMSource(doc);
-	StreamResult result = new StreamResult(xmlFile);
+        StreamResult result = new StreamResult(xmlFile);
     
         transformer.transform(source, result);
         
         return true;
-    }
-    
+    }  
     /**
      * Static method for XML validation against XSD schema.
      * @param xmlFilePath Input XML file path.
@@ -226,7 +215,6 @@ public class HandlerXML {
         }
         return true;
     }
-    
     /**
      * Static method for XML transformation using provided XSL file.
      * @param xmlFilePath Path to input XML file.
