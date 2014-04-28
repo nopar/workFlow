@@ -202,19 +202,5 @@ public class ComWrapper {
 		
 	return dSigner.getPropertyAsString("SignedXmlWithEnvelope");
 	}
-        
-	/* main example
-	public static void main(String[] args) {
-		ComWrapper cw = new ComWrapper("lib/jacob-1.17-x86.dll");
-		String ns = "http://wfms.fei.stuba.sk/team/R";
-		try {
-			cw.loadLibrary();
-			String sxml = cw.signXades256(new File("users.xml"), new File("schemas/users.xsd"), ns, new File("schemas/users.xsl"), ns, ns);
-			System.out.println(sxml);
-		} catch(UnsatisfiedLinkError | Exception e) {
-			System.out.println(e.getMessage());
-		}
-	}
-        */
 }
 

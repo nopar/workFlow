@@ -5,6 +5,7 @@ import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import stuba.fei.wfms.integration.ComWrapper;
+import stuba.fei.wfms.integration.Timestamper;
 import stuba.fei.wfms.xmlhandler.HandlerXML;
 
 public class GUI extends javax.swing.JFrame {
@@ -33,6 +34,7 @@ public class GUI extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         infoPanel = new javax.swing.JTextArea();
         exit_jButton5 = new javax.swing.JButton();
@@ -163,6 +165,13 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
+        jButton5.setText("Obtain timestamp");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                timestampActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout action_jPanel2Layout = new org.jdesktop.layout.GroupLayout(action_jPanel2);
         action_jPanel2.setLayout(action_jPanel2Layout);
         action_jPanel2Layout.setHorizontalGroup(
@@ -172,22 +181,25 @@ public class GUI extends javax.swing.JFrame {
                 .add(action_jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(action_jPanel2Layout.createSequentialGroup()
                         .add(jButton2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 110, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(0, 0, Short.MAX_VALUE))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(jButton4))
                     .add(action_jPanel2Layout.createSequentialGroup()
                         .add(jButton3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 110, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .add(jButton4)))
+                        .add(jButton5)))
                 .addContainerGap())
         );
         action_jPanel2Layout.setVerticalGroup(
             action_jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(action_jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jButton2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(action_jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jButton2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jButton4))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(action_jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jButton3)
-                    .add(jButton4))
+                    .add(jButton5))
                 .addContainerGap())
         );
 
@@ -464,6 +476,28 @@ public class GUI extends javax.swing.JFrame {
             infoPanel.append(e.getMessage()+"\n");
         }
     }//GEN-LAST:event_signActionPerformed
+    /**
+    * Triggered action on timestamp button.
+    * @param evt 
+    */
+    private void timestampActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_timestampActionPerformed
+        try {
+            JFileChooser tsXML = new JFileChooser();
+            tsXML.setFileFilter(
+                    new FileNameExtensionFilter("XML file", new String[] {"xml"}));
+            tsXML.setDialogTitle("Signed XML input file to be stamped");
+            tsXML.showOpenDialog(jFrame1);
+            if(!tsXML.getSelectedFile().exists())
+                throw new Exception("XML file not selected or invalid!");
+            String xmlFile = tsXML.getSelectedFile().getPath();
+            
+            Timestamper.injectTimestamp(xmlFile);
+            
+            infoPanel.append("Signed XML successfully timestamped\n");
+        } catch(Exception e) {
+            infoPanel.append(e.getMessage()+"\n");
+        }
+    }//GEN-LAST:event_timestampActionPerformed
     
     /**
      * Generated main method.
@@ -509,6 +543,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JFrame jFrame2;
     private javax.swing.JLabel jLabel1;
