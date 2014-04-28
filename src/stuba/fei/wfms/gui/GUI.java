@@ -457,9 +457,9 @@ public class GUI extends javax.swing.JFrame {
             sxml = cw.signXades256(
                     new File(xmlFile),
                     new File(xsdFile),
-                    namespace,
+                    "http://wfms.fei.stuba.sk/team/R/xsd",
                     new File(xslFile),
-                    namespace,
+                    "http://wfms.fei.stuba.sk/team/R/xslt",
                     namespace
             );
             infoPanel.append("Signed XML envelope created!\n");
