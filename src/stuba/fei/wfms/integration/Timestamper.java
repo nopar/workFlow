@@ -112,8 +112,16 @@ public class Timestamper {
                 doc.createElement("xades:UnsignedSignatureProperties");
         
         Element sTS = doc.createElement("xades:SignatureTimeStamp");
+        Attr att = doc.createAttribute("id");
+        att.setValue("timeStamp42");
+        
         String ts = createTSinB64(xmlFilePath);
-        sTS.appendChild(doc.createTextNode(ts));
+        
+        Element ensTS = doc.createElement("xades:EncapsulatedTimeStamp");
+        ensTS.appendChild(doc.createTextNode(ts));
+        
+        sTS.appendChild(ensTS);
+        sTS.setAttributeNode(att);
         
         unSigProp.appendChild(sTS);
         unProp.appendChild(unSigProp);
