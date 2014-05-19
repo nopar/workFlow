@@ -1,12 +1,12 @@
-package stuba.fei.wfms.gui;
+package sk.stuba.fei.wfms.gui;
 
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import stuba.fei.wfms.integration.ComWrapper;
-import stuba.fei.wfms.integration.Timestamper;
-import stuba.fei.wfms.xmlhandler.HandlerXML;
+import sk.stuba.fei.wfms.integration.ComWrapper;
+import sk.stuba.fei.wfms.integration.Timestamper;
+import sk.stuba.fei.wfms.xmlhandler.HandlerXML;
 
 public class GUI extends javax.swing.JFrame {
     

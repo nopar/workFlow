@@ -1,4 +1,4 @@
-package stuba.fei.wfms.integration;
+package sk.stuba.fei.wfms.integration;
 
 import java.io.BufferedReader;
 import java.io.File;

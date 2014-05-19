@@ -1,4 +1,4 @@
-package stuba.fei.wfms.xmlhandler;
+package sk.stuba.fei.wfms.xmlhandler;
 
 import java.io.File;
 import java.io.IOException;
