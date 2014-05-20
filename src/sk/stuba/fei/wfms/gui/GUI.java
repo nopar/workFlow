@@ -62,7 +62,7 @@ public class GUI extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("XML creator - validator - exporter");
+        setTitle("XAdES - T generator");
         setBackground(new java.awt.Color(48, 241, 17));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("User"));
